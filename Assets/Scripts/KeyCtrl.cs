@@ -18,7 +18,7 @@ public class KeyCtrl : MonoBehaviour
             }
         }else if (other.gameObject.CompareTag("Door"))
         {
-            Destroy(gameObject);
+            Destroy(this.gameObject);
             Destroy(other.gameObject);
         }
 

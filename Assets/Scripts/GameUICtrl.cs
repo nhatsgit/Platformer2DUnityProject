@@ -17,6 +17,7 @@ public class GameUICtrl : MonoBehaviour
     private Button restartBtn;
     private Button mainMenuBtn;
     private Button continueBtn;
+    private Toggle isMobileMode;
 
     [SerializeField] public GameObject endGameUI;
     private Button restartBtn2;
@@ -25,8 +26,9 @@ public class GameUICtrl : MonoBehaviour
     private void Awake()
     {
         GameUICtrl.instance = this;
-        OnStartGame();
+        isMobileMode = pauseGameUI.transform.Find("MobileMode").gameObject.GetComponent<Toggle>();
         InitButton();
+        OnStartGame();
     }
     private void Start()
     {
@@ -48,7 +50,7 @@ public class GameUICtrl : MonoBehaviour
     private void OnStartGame()
     {
         pauseButton.SetActive(true);
-        moveUI.SetActive(true);
+        if(isMobileMode.isOn==true) moveUI.SetActive(true); else moveUI.SetActive(false);
         endGameUI.SetActive(false);
         pauseGameUI.SetActive(false);
     }
