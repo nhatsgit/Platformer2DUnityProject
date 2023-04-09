@@ -17,17 +17,21 @@ public class GameUICtrl : MonoBehaviour
     private Button restartBtn;
     private Button mainMenuBtn;
     private Button continueBtn;
-    private Toggle isMobileMode;
+    private Toggle MobileModeToggle;
 
     [SerializeField] public GameObject endGameUI;
     private Button restartBtn2;
     private Button mainMenuBtn2;
     private Button nextLevelBtn;
+
+    private String gameModeKey;
+    private int gameModeValue;
+    private bool isMobileMode;
     private void Awake()
     {
         GameUICtrl.instance = this;
-        isMobileMode = pauseGameUI.transform.Find("MobileMode").gameObject.GetComponent<Toggle>();
-        InitButton();
+        GetGameModeData();
+        InitUI();
         OnStartGame();
     }
     private void Start()
@@ -39,8 +43,20 @@ public class GameUICtrl : MonoBehaviour
         restartBtn2.onClick.AddListener(() => OnRestart());
         mainMenuBtn2.onClick.AddListener(() => OnMainMenu());
         nextLevelBtn.onClick.AddListener(() => OnNextLevel());
+        MobileModeToggle.onValueChanged.AddListener(delegate {OnGameModeChange(MobileModeToggle);});
     }
-
+    private void GetGameModeData()
+    {
+        gameModeValue = PlayerPrefs.GetInt(gameModeKey, 1);
+        if (gameModeValue == 1)
+        {
+            isMobileMode = true;
+        }
+        else
+        {
+            isMobileMode = false;
+        }
+    }
     private void OnContinue()
     {
         pauseButton.SetActive(true);
@@ -50,11 +66,19 @@ public class GameUICtrl : MonoBehaviour
     private void OnStartGame()
     {
         pauseButton.SetActive(true);
-        if(isMobileMode.isOn==true) moveUI.SetActive(true); else moveUI.SetActive(false);
+        moveUI.SetActive(isMobileMode);
         endGameUI.SetActive(false);
         pauseGameUI.SetActive(false);
     }
-    private void InitButton()
+    private void OnGameModeChange(Toggle change)
+    {
+        moveUI.SetActive(!moveUI.activeSelf);
+        PlayerMove.instance.StatusChange_();
+        PlayerMoveByButtons.instance_.StatusChange();
+        gameModeValue = -gameModeValue;
+        SaveGameMode();
+    }
+    private void InitUI()
     {
         pauseBtn = pauseButton.GetComponent<Button>();
         restartBtn = pauseGameUI.transform.Find("Restart").gameObject.GetComponent<Button>();
@@ -63,7 +87,7 @@ public class GameUICtrl : MonoBehaviour
         restartBtn2 = endGameUI.transform.Find("Restart").gameObject.GetComponent<Button>();
         mainMenuBtn2 = endGameUI.transform.Find("MainMenu").gameObject.GetComponent<Button>();
         nextLevelBtn = endGameUI.transform.Find("NextLevel").gameObject.GetComponent<Button>();
-
+        MobileModeToggle = pauseGameUI.transform.Find("MobileMode").gameObject.GetComponent<Toggle>();
     }
     private void OnPause()
     {
@@ -81,5 +105,10 @@ public class GameUICtrl : MonoBehaviour
     private void OnNextLevel()
     {
         GameCtrl.instance.NextLevel();
-    }    
+    }   
+    private void SaveGameMode()
+    {
+        PlayerPrefs.SetInt(gameModeKey, gameModeValue);
+        PlayerPrefs.Save();
+    }
 }

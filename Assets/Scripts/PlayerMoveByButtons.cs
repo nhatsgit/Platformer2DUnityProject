@@ -21,5 +21,14 @@ public class PlayerMoveByButtons : PlayerMove
     {
         horizontal = value;
     }
-    
+    public void StatusChange()
+    {
+        this.GetComponent<PlayerMoveByButtons>().enabled = !this.GetComponent<PlayerMoveByButtons>().enabled;
+        isRightDirection = (this.transform.rotation.y == 0);
+    }
+    private void OnEnable()
+    {
+        isRightDirection = true;
+        this.transform.rotation = Quaternion.Euler(0, 0, 0);
+    }
 }

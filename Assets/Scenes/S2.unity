@@ -366,10 +366,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f4b3b7a67cd84f4996f90ce451904ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseButton: {fileID: 1662601087}
   moveUI: {fileID: 491191682}
-  endGameUI: {fileID: 56280912}
+  pauseButton: {fileID: 1662601087}
   pauseGameUI: {fileID: 593921531}
+  endGameUI: {fileID: 56280912}
 --- !u!1 &148327393
 GameObject:
   m_ObjectHideFlags: 0

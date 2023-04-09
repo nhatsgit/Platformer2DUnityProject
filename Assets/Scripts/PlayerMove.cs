@@ -7,10 +7,10 @@ public class PlayerMove : MonoBehaviour
     public static PlayerMove instance;
     [SerializeField] protected float speed;
     [SerializeField] protected float pushPower;
-    protected Rigidbody2D rb;
     protected float horizontal;
-    protected bool isRightDirection = true;
+    protected bool isRightDirection=true;
     protected Collider2D boxColider2d;
+        protected Rigidbody2D rb;
     protected Animator anm;
     [SerializeField] protected LayerMask Ground;
 
@@ -22,6 +22,7 @@ public class PlayerMove : MonoBehaviour
         rb = this.GetComponent<Rigidbody2D>();
         anm = this.GetComponent<Animator>();
     }
+
     protected virtual void Update()
     {
         CheckInput();
@@ -76,5 +77,13 @@ public class PlayerMove : MonoBehaviour
         RaycastHit2D raycastHit2D = Physics2D.BoxCast(boxColider2d.bounds.center, boxColider2d.bounds.size, 0, Vector2.down, 0.1f, Ground);
         return raycastHit2D.collider != null;
     }
-
+    public void StatusChange_()
+    {
+        this.GetComponent<PlayerMove>().enabled = !this.GetComponent<PlayerMove>().enabled;
+    }
+    private void OnEnable()
+    {
+        isRightDirection = true;
+        this.transform.rotation = Quaternion.Euler(0,0,0);
+    }
 }
