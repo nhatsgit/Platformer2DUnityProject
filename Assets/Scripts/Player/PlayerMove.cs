@@ -12,7 +12,6 @@ public class PlayerMove : MonoBehaviour
     protected Collider2D boxColider2d;
     protected Rigidbody2D rb;
     protected Animator anm;
-    public AudioSource jumpSound;
     public GameObject footsteps;
     [SerializeField] protected LayerMask Ground;
 
@@ -66,7 +65,7 @@ public class PlayerMove : MonoBehaviour
     {        
         if (IsGrounded()) 
         {
-            jumpSound.Play();
+            SoundManager.instance.OnPlaySound(SoundType.jump);
             rb.velocity = new Vector2(rb.velocity.x, pushPower);
         }
     }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
+    public static PlayerManager instance;
     public CharacterDatabase characterDatabase;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
@@ -11,6 +12,7 @@ public class PlayerManager : MonoBehaviour
     private int currentOption = 0;
     private void Awake()
     {
+        PlayerManager.instance = this;
         LoadData();
         spriteRenderer = this.GetComponent<SpriteRenderer>();
         animator = this.GetComponent<Animator>();

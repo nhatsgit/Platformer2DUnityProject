@@ -27,8 +27,6 @@ public class GameUICtrl : MonoBehaviour
     private String gameModeKey="gameModeKey";
     private int gameModeValue;
     private bool isMobileMode;
-
-    [SerializeField] private AudioSource clickSound;
     private void Awake()
     {
         GameUICtrl.instance = this;
@@ -54,11 +52,12 @@ public class GameUICtrl : MonoBehaviour
     {
         pauseButton.SetActive(true);
         pauseGameUI.SetActive(false);
-        clickSound.Play();
+        SoundManager.instance.OnPlaySound(SoundType.click);
     }
 
     private void OnStartGame()
     {
+        SoundManager.instance.OnPlaySound(SoundType.click);
         pauseButton.SetActive(true);
         moveUI.SetActive(isMobileMode);
         MobileModeToggle.isOn= isMobileMode;
@@ -72,7 +71,7 @@ public class GameUICtrl : MonoBehaviour
         PlayerMoveByButtons.instance_.StatusChange(moveUI.activeSelf);
         gameModeValue = -gameModeValue;
         SaveGameMode();
-        clickSound.Play();
+        isMobileMode = (gameModeValue == 1);
 
     }
     private void GetGameModeData()
@@ -98,28 +97,25 @@ public class GameUICtrl : MonoBehaviour
     }
     private void OnPause()
     {
+        SoundManager.instance.OnPlaySound(SoundType.click);
         pauseButton.SetActive(false);
         pauseGameUI.SetActive(true);
-        clickSound.Play();
-
+        isMobileMode = (gameModeValue == 1);
     }
     private void OnRestart()
     {
         GameCtrl.instance.Restart();
-        clickSound.Play();
-
+        isMobileMode = (gameModeValue == 1);
     }
     private void OnMainMenu()
     {
         GameCtrl.instance.BackMenu();
-        clickSound.Play();
-
+        isMobileMode = (gameModeValue == 1);
     }
     private void OnNextLevel()
     {
         GameCtrl.instance.NextLevel();
-        clickSound.Play();
-
+        isMobileMode = (gameModeValue == 1);
     }
 
 }

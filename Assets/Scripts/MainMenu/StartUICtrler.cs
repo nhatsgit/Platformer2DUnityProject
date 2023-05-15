@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,9 +12,8 @@ public class StartUICtrler : MonoBehaviour
     private Button quitButton;
     private Button backSettingBtn;
     private Button backChooseLVBtn;
-    //[SerializeField] private Toggle consoleMode;
+    private Slider volumeBar;
     //[SerializeField] private Toggle mobileMode;
-    public AudioSource clickSound;
 
 
     private void Awake()
@@ -25,7 +22,7 @@ public class StartUICtrler : MonoBehaviour
         startUI.SetActive(true);
         chooseLV.SetActive(false);
         settingUI.SetActive(false);
-        InitButton();
+        InitUI();
     }
     private void Start()
     {
@@ -34,37 +31,47 @@ public class StartUICtrler : MonoBehaviour
         backSettingBtn.onClick.AddListener(OnBackSetting);
         backChooseLVBtn.onClick.AddListener(OnBackChooseLV);
         quitButton.onClick.AddListener(() => Application.Quit());
+        volumeBar.onValueChanged.AddListener(delegate { OnVolumeChange(); });
+        volumeBar.value = PlayerPrefs.GetFloat("Volume",1);
     }
-    private void InitButton()
+    private void InitUI()
     {
         playButton = startUI.transform.Find("Play").gameObject.GetComponent<Button>();
         settingButton = startUI.transform.Find("Setting").gameObject.GetComponent<Button>();
         quitButton = startUI.transform.Find("Quit").gameObject.GetComponent<Button>();
         backChooseLVBtn = chooseLV.transform.Find("Back").gameObject.GetComponent<Button>();
         backSettingBtn = settingUI.transform.Find("Back").gameObject.GetComponent<Button>();
+        volumeBar= settingUI.transform.Find("VolumeBar").gameObject.GetComponent<Slider>();
     }
     private void OnPlay()
     {
-        clickSound.Play();
+        SoundManager.instance.OnPlaySound(SoundType.click);
+        //clickSound.Play();
         chooseLV.SetActive(true);
         startUI.SetActive(false);
     }
     private void OnSetting()
     {
-        clickSound.Play();
+        SoundManager.instance.OnPlaySound(SoundType.click);
         settingUI.SetActive(true);
         startUI.SetActive(false);
     }
     private void OnBackSetting()
     {
-        clickSound.Play();
+        SoundManager.instance.OnPlaySound(SoundType.click);
         settingUI.SetActive(false);
         startUI.SetActive(true);
     }
     private void OnBackChooseLV()
     {
-        clickSound.Play();
+        SoundManager.instance.OnPlaySound(SoundType.click);
         chooseLV.SetActive(false);
         startUI.SetActive(true);
+    }
+    private void OnVolumeChange()
+    {
+        SoundManager.instance.OnSoundVolumeChange(volumeBar.value);
+        MusicManager.instance.OnMusicVolumeChange(volumeBar.value);
+        PlayerPrefs.SetFloat("Volume", volumeBar.value);
     }
 }
